@@ -1,0 +1,240 @@
+<div class="main-content page-m">
+    <div class="section-content section-content-p30">
+        <div class="container-fluid">
+            <form [formGroup]="checkoutFormGroup" (ngSubmit)="onSubmit()">
+                <div formGroupName="customer" class="form-area">
+                    <h3>customer</h3>
+                    <div class="row">
+                        <div class="col-md-2"><label>firstName</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                                <input formControlName="firstName" type="text">
+                                <div *ngIf="firstName.invalid && (firstName.dirty||firstName.touched)" class="alert alert-danger mt-1">
+                                    <div *ngIf="firstName.errors.required||firstName.errors.notOnlyWhiteSpace">this field is required</div>
+                                    <div *ngIf="firstName.errors.minlength">must be at least 2 character</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"><label>lastName</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                                <input formControlName="lastName" type="text">
+                                <div *ngIf="lastName.invalid && (lastName.dirty||lastName.touched)" class="alert alert-danger mt-1">
+                                    <div *ngIf="lastName.errors.required ||lastName.errors.notOnlyWhiteSpace">this field is required</div>
+                                    <div *ngIf="lastName.errors.minlength">must be at least 2 character</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2"><label>email</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                                <input formControlName="email" type="text">
+                                <div *ngIf="lastName.invalid && (email.dirty||email.touched)" class="alert alert-danger mt-1">
+                                    <div *ngIf="email.errors.required ||email.errors.notOnlyWhiteSpace">this field is required</div>
+                                    <div *ngIf="email.errors.pattern">must be a valid email address</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!--shipping-->
+                <div formGroupName="shippingAddress" class="form-area">
+                    <h3>shippingAddress</h3>
+                    <div class="row">
+                        <div class="col-md-2"><label>country</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                               <select formControlName="country" (change)="getCountryState('shippingAddress')" >
+                                   <option *ngFor="let country of countries" [ngValue]="country" >
+                                       {{country.name}}
+                                </option>
+                               </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"><label>street</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                                <input formControlName="street" type="text">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2"><label>city</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                                <input formControlName="city" type="text">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2"><label>state</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                               <select formControlName="state">
+                                   <option *ngFor="let state of shippingState" [ngValue]="state" >
+                                       {{state.name}}
+                                        </option>
+                               </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2"><label>zipCode</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                                <input formControlName="zipCode" type="text">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!--add a checkbox to copy shipping to biling-->
+                <div class="input-space">
+                    <label class="au-checkbox">
+                        <input type="checkbox" (change)="copyShippingToBilling($event)" >
+                        <span class="au-checkmark"></span>billing same as shippingAddress
+                    </label>
+                </div>
+                <!--billing address-->
+                <div formGroupName="billingAddress" class="form-area">
+                    <h3>billingAddress</h3>
+                    <div class="row">
+                        <div class="col-md-2"><label>country</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                               <select formControlName="country">
+                                <option *ngFor="let country of countries" [ngValue]="country">
+                                    {{country.name}}
+                             </option>
+                               </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"><label>street</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                                <input formControlName="street" type="text">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2"><label>city</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                                <input formControlName="city" type="text">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2"><label>state</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                               <select formControlName="state">
+                                <option *ngFor="let state of shippingState" [ngValue]="state" >
+                                    {{state.name}}
+                                     </option>
+                               </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2"><label>zipCode</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                                <input formControlName="zipCode" type="text">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!--credit card-->
+                <div class="form-area" formGroupName="creditCard">
+                    <h3>creditCard</h3>
+                    <div class="row">
+                        <div class="col-md-2"><label>card Type</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                               <select formControlName="cardType">
+                                   <option>visa</option>
+                                   <option>master</option>
+                               </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2"><label>name On Card</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                                <input formControlName="nameOnCard" type="text">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2"><label>card number</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                                <input formControlName="cardNumber" type="text">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2"><label>security code</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                                <input formControlName="securityCode" type="text">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2"><label>expiration month</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                               <select formControlName="expirationMonth">
+                                 <option *ngFor="let month of creditCardMonth">
+                                     {{month}}
+                                 </option>
+                                   
+                               </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2"><label>expiration year</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                               <select formControlName="expirationYear" (change)="handleMonthAndYear()">
+                                   <option *ngFor="let year of creditCardYear">{{year}} </option>
+                                   
+                               </select>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!--order details-->
+                <div class="form-area" >
+                    <h3>review your order</h3>
+                    <p>total quantity:{{totalQuantity}}</p>
+                    <p>shipping FREE</p>
+                    <p>total price:{{totalPrice|currency:'USD'}}</p>
+                </div>
+                <!--submit button-->
+                <div class="text-center">
+                    <button type="submit" class="btn btn-info">purchase</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
